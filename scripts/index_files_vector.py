@@ -42,4 +42,19 @@ def main():
     
     # Run indexing
     path = args.path or Config.FILE_SHARE_PATH
-    stats = indexer.index_directory(    
+stats = indexer.index_directory(
+directory_path=path,
+recursive=args.recursive,
+show_progress=not args.no_progress
+)
+print("\n✨ Vector indexing complete!")
+return 0
+if name == "main":
+sys.exit(main())
+        directory_path=path,
+        recursive=args.recursive,
+        show_progress=not args.no_progress
+    )
+    
+    print("\n✨ Vector indexing complete!")
+    return 0
