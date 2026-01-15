@@ -378,4 +378,23 @@ class SearchClient:
                 output.append(f"   Modified: {result['modifiedDateTime']}")
             
             if show_scores and '@search.score' in result:
-                output.append(f"   Score: {result['@search.score']:.4f}")   
+                output.append(f"   Score: {result['@search.score']:.4f}")
+            
+            if '@search.reranker_score' in result:
+                output.append(f"   Reranker Score: {result['@search.reranker_score']:.4f}")
+            
+            # Show captions if available
+            if '@search.captions' in result:
+                for caption in result['@search.captions']:
+                    output.append(f"   Caption: {caption.text}")
+            
+            # Show content preview
+            content = result.get('chunk') or result.get('content', '')
+            if content:
+                preview = content[:200].replace('\n', ' ')
+                output.append(f"   Preview: {preview}...")
+            
+            output.append("")
+        
+        output.append("=" * 80)
+        return '\n'.join(output)
