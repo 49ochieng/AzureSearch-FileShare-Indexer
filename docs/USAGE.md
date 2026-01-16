@@ -535,5 +535,3 @@ Benefits:
 # For general documents
 CHUNK_SIZE=1000
 CHUNK_OVERLAP=200
-
-# For technical documents (more context needed)
