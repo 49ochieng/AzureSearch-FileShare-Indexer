@@ -535,3 +535,8 @@ Benefits:
 # For general documents
 CHUNK_SIZE=1000
 CHUNK_OVERLAP=200
+CHUNK_SIZE=1500
+CHUNK_OVERLAP=300
+For short documents (less chunking)
+CHUNK_SIZE=500
+CHUNK_OVERLAP=100
