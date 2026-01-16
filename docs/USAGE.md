@@ -540,3 +540,265 @@ CHUNK_OVERLAP=300
 For short documents (less chunking)
 CHUNK_SIZE=500
 CHUNK_OVERLAP=100
+
+#### 3. Enable Caching
+```env
+CACHE_EMBEDDINGS=true
+CACHE_DIR=.cache
+```
+
+Benefits:
+- Reduced API calls (cost savings)
+- Faster re-indexing of unchanged content
+- Better performance
+
+#### 4. Schedule Regular Indexing
+```python
+import schedule
+import time
+from src.vector_indexer import VectorIndexer
+
+def daily_index_job():
+    indexer = VectorIndexer()
+    stats = indexer.index_directory()
+    print(f"Daily indexing complete: {stats['successful_files']} files")
+
+# Run daily at 2 AM
+schedule.every().day.at("02:00").do(daily_index_job)
+
+while True:
+    schedule.run_pending()
+    time.sleep(60)
+```
+
+### Search Best Practices
+
+#### 1. Choose the Right Search Type
+
+| Use Case | Recommended Type | Why |
+|----------|-----------------|-----|
+| Exact keyword match | Keyword | Fastest, precise |
+| Conceptual search | Vector | Understands meaning |
+| General purpose | Hybrid | Best balance |
+| Important queries | Semantic | Highest quality |
+
+#### 2. Filter Early
+```python
+# Good: Filter before search
+results = search.filtered_search(
+    query="reports",
+    extension=".pdf",
+    date_from="2024-01-01T00:00:00Z"
+)
+
+# Avoid: Filter after search (slower)
+results = search.hybrid_search("reports", top=1000)
+filtered = [r for r in results if r['extension'] == '.pdf']
+```
+
+#### 3. Use Appropriate Top K
+```python
+# For user-facing search: 5-10 results
+results = search.hybrid_search("query", top=10)
+
+# For analysis: More results
+results = search.hybrid_search("query", top=100)
+
+# For aggregations: Just metadata
+results = search.search("query", top=0)  # Get facets only
+```
+
+---
+
+## Performance Tuning
+
+### Indexing Performance
+
+#### 1. Adjust Batch Size
+```env
+# More documents per batch = faster but more memory
+BATCH_SIZE=100
+
+# Fewer documents = slower but less memory
+BATCH_SIZE=10
+```
+
+#### 2. Concurrent Processing
+```env
+# More workers = faster but more CPU/memory
+MAX_WORKERS=8
+
+# Fewer workers = slower but less resource usage
+MAX_WORKERS=2
+```
+
+#### 3. Optimize Retry Logic
+```env
+# Aggressive retries
+MAX_RETRIES=5
+RETRY_DELAY=1
+
+# Conservative retries
+MAX_RETRIES=3
+RETRY_DELAY=5
+```
+
+### Search Performance
+
+#### 1. Use Filters
+```python
+# Fast: Filter reduces candidate set
+results = search.hybrid_search(
+    query="documents",
+    filter_expr="extension eq '.pdf'"
+)
+
+# Slower: No filter
+results = search.hybrid_search("documents")
+```
+
+#### 2. Limit Fields Returned
+```python
+# Faster: Only return needed fields
+results = search.hybrid_search(
+    query="documents",
+    select=["name", "filePath", "@search.score"]
+)
+
+# Slower: Return all fields
+results = search.hybrid_search("documents")
+```
+
+#### 3. Cache Common Queries
+```python
+from functools import lru_cache
+
+class CachedSearch:
+    def __init__(self):
+        self.search = SearchClient()
+    
+    @lru_cache(maxsize=100)
+    def cached_search(self, query: str, top: int = 5):
+        return tuple(self.search.hybrid_search(query, top))
+
+# Use cached search
+cached = CachedSearch()
+results = cached.cached_search("employee benefits")
+```
+
+---
+
+## Integration Patterns
+
+### 1. REST API Integration
+```python
+from flask import Flask, request, jsonify
+from src.search import SearchClient
+
+app = Flask(__name__)
+search = SearchClient()
+
+@app.route('/search', methods=['GET'])
+def api_search():
+    query = request.args.get('q')
+    top = int(request.args.get('top', 5))
+    
+    results = search.hybrid_search(query, top=top)
+    
+    return jsonify({
+        'query': query,
+        'count': len(results),
+        'results': [dict(r) for r in results]
+    })
+
+if __name__ == '__main__':
+    app.run(port=5000)
+```
+
+### 2. Chatbot Integration
+```python
+from src.search import SearchClient
+
+class DocumentChatbot:
+    def __init__(self):
+        self.search = SearchClient()
+    
+    def answer_question(self, question: str) -> str:
+        # Search for relevant documents
+        results = self.search.semantic_search(question, top=3)
+        
+        if not results:
+            return "I couldn't find any relevant information."
+        
+        # Format context from top results
+        context = "\n\n".join([
+            f"From {r['name']}:\n{r['chunk'][:500]}"
+            for r in results
+        ])
+        
+        return f"Based on the documents:\n\n{context}"
+
+# Use in chatbot
+bot = DocumentChatbot()
+answer = bot.answer_question("What are the company benefits?")
+print(answer)
+```
+
+### 3. Microsoft 365 Copilot Integration
+```python
+# Configure Search as data source for Copilot
+# In Azure Portal:
+# 1. Go to your AI Foundry project
+# 2. Add Data Source → Azure AI Search
+# 3. Configure:
+#    - Endpoint: AZURE_SEARCH_ENDPOINT
+#    - Index: AZURE_SEARCH_VECTOR_INDEX_NAME
+#    - Key: AZURE_SEARCH_KEY
+#    - Fields: chunk, title, filePath
+```
+
+### 4. Scheduled Reporting
+```python
+import schedule
+from datetime import datetime
+from src.vector_indexer import VectorIndexer
+import smtplib
+from email.mime.text import MIMEText
+
+def weekly_report():
+    indexer = VectorIndexer()
+    stats = indexer.index_directory()
+    
+    report = f"""
+    Weekly Indexing Report - {datetime.now().strftime('%Y-%m-%d')}
+    
+    Files Indexed: {stats['successful_files']}
+    Chunks Created: {stats['total_chunks']}
+    API Calls: {stats['embedding_api_calls']}
+    Total Size: {stats['total_size_mb']:.2f} MB
+    """
+    
+    # Send email (configure SMTP settings)
+    msg = MIMEText(report)
+    msg['Subject'] = 'Weekly Indexing Report'
+    msg['From'] = 'indexer@company.com'
+    msg['To'] = 'admin@company.com'
+    
+    # smtp.send_message(msg)
+    print(report)
+
+# Run every Monday at 9 AM
+schedule.every().monday.at("09:00").do(weekly_report)
+```
+
+---
+
+## Next Steps
+
+- Review [API Documentation](API.md) for detailed API reference
+- Explore [Examples](../examples/) for code samples
+- Read [Deployment Guide](DEPLOYMENT.md) for production setup
+
+---
+
+**Happy Indexing!** 🚀
