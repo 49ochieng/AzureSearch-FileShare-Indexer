@@ -1083,4 +1083,61 @@ class MetricsCollector:
             'total_size_mb': 0,
         }
     
-    def increment(self, metric: str, value: int
+    def increment(self, metric: str, value: int= 1):
+self.metrics[metric] += value
+def get_metrics(self):
+    return self.metrics.copy()
+Use in indexer
+metrics = MetricsCollector()
+def index_with_metrics(file_path):
+try:
+chunks = indexer.index_file(file_path)
+metrics.increment('files_processed')
+metrics.increment('chunks_created', chunks)
+except Exception as e:
+metrics.increment('errors')
+raise
+
+---
+
+## Disaster Recovery
+
+### Backup Strategy
+┌─────────────────────────────────────────────────────────────┐
+│                    Backup Strategy                           │
+└─────────────────────────────────────────────────────────────┘
+What to Backup:
+
+Index Schema (export to JSON)
+Configuration (.env template)
+Custom Code
+Embedding Cache (optional, can regenerate)
+
+NOT Needed:
+
+Indexed documents (can re-index from source)
+Azure AI Search data (Azure handles)
+
+
+### Recovery Procedures
+```bash
+# 1. Export index schema
+python -c "
+from src.index_manager import IndexManager
+import json
+
+manager = IndexManager()
+# Get index definition via API and save
+"
+
+# 2. Recreate index
+python scripts/create_vector_index.py
+
+# 3. Re-index documents
+python scripts/index_files_vector.py
+
+# 4. Verify
+python scripts/search_demo.py "test query"
+```
+
+---
