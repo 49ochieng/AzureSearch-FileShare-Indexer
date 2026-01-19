@@ -116,3 +116,112 @@ A: Depends on your needs:
 | Small team, testing | Local workstation |
 | On-premises files | Windows Server with Task Scheduler |
 | Cloud-native
+Jan 16
+| Azure Functions |
+| Enterprise scale | Kubernetes (AKS) |
+
+See Deployment Guide
+
+Q: How do I schedule regular indexing?
+
+A: Multiple options:
+
+Windows: Task Scheduler (guide)
+Linux: Cron jobs
+Azure: Azure Functions with timer trigger
+Kubernetes: CronJob resource
+Q: Can I run multiple indexers in parallel?
+
+A: Yes! For large file shares:
+
+Partition by directory
+Run separate indexer instances
+All write to same Azure AI Search index
+Improves overall throughput
+Performance Questions
+Q: How long does indexing take?
+
+A: Depends on:
+
+Number of files
+File sizes
+Embedding API rate limits
+Network speed
+Typical: 10-50 files/minute with vector embeddings
+
+Q: How can I speed up indexing?
+
+A: Several strategies:
+
+Increase BATCH_SIZE and MAX_WORKERS
+Enable CACHE_EMBEDDINGS
+Use INCREMENTAL_INDEXING
+Upgrade Azure OpenAI quota
+See Troubleshooting - Performance Issues
+
+Q: My searches are slow. How can I improve performance?
+
+A: Try:
+
+Use filters to reduce result set
+Limit fields returned
+Reduce top parameter
+Upgrade Azure AI Search tier
+Security Questions
+Q: How are credentials secured?
+
+A: Multiple approaches:
+
+Development: .env file (never committed)
+Production: Azure Key Vault or Managed Identity
+All secrets masked in logs
+See Security Policy
+
+Q: Can I use managed identity instead of API keys?
+
+A: Yes! Recommended for production:
+
+python
+from azure.identity import DefaultAzureCredential
+
+credential = DefaultAzureCredential()
+# Use credential instead of API key
+```
+
+**Q: Is my data encrypted?**
+
+A: Yes:
+- **At rest**: Azure AI Search encrypts all data (AES-256)
+- **In transit**: All API calls use TLS 1.2+
+- **Local cache**: Use file system encryption (BitLocker/LUKS)
+
+---
+
+## Documentation Contributions
+
+Found an issue or want to improve the documentation?
+
+1. Check existing documentation
+2. Submit an issue or pull request
+3. See [Contributing Guide](../CONTRIBUTING.md)
+
+---
+
+## Additional Resources
+
+### Official Azure Documentation
+- [Azure AI Search](https://docs.microsoft.com/azure/search/)
+- [Azure OpenAI](https://docs.microsoft.com/azure/ai-services/openai/)
+
+### Related Projects
+- [Azure SDK for Python](https://github.com/Azure/azure-sdk-for-python)
+- [OpenAI Python Client](https://github.com/openai/openai-python)
+
+### Community
+- [GitHub Discussions](https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/discussions)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-search)
+
+---
+
+**Questions not answered here?** Check [Troubleshooting](TROUBLESHOOTING.md) or open an [issue](https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/issues).
+```
