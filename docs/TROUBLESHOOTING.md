@@ -905,7 +905,7 @@ Include:
 
 ### Where to Get Help
 
-- **GitHub Issues**: https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/issues
+- **GitHub Issues**: https://github.com/49ochieng/AzureSearch-FileShare-Indexer/issues
 - **GitHub Discussions**: https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/discussions
 - **Email**: your.email@example.com
 
