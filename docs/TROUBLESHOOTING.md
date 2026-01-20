@@ -907,7 +907,7 @@ Include:
 
 - **GitHub Issues**: https://github.com/49ochieng/AzureSearch-FileShare-Indexer/issues
 - **GitHub Discussions**: https://github.com/49ochieng/AzureSearch-FileShare-Indexer/discussions
-- **Email**: your.email@example.com
+- **Email**: edgar@mcochieng.com
 
 ---
 
