@@ -296,5 +296,5 @@ See [Contributing Guide](../CONTRIBUTING.md)
 ## Need Help?
 
 - Check [Documentation](../docs/)
-- Open an [Issue](https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/issues)
-- Ask in [Discussions](https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/discussions)
+- Open an [Issue](https://github.com/49ochieng/AzureSearch-FileShare-Indexer/issues)
+- Ask in [Discussions](https://github.com/49ochieng/AzureSearch-FileShare-Indexer/discussions)

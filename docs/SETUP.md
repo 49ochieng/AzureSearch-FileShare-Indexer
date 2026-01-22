@@ -660,7 +660,7 @@ CACHE_EMBEDDINGS=true
 If you encounter issues not covered here:
 
 1. Check [Troubleshooting Guide](TROUBLESHOOTING.md)
-2. Review [GitHub Issues](https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/issues)
+2. Review [GitHub Issues](https://github.com/49ochieng/AzureSearch-FileShare-Indexer/issues)
 3. Enable debug logging: `LOG_LEVEL=DEBUG`
 4. Create a new issue with:
    - Error message
