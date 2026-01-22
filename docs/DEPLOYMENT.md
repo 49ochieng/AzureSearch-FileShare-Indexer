@@ -1007,4 +1007,4 @@ Use Azure Load Balancer or Application Gateway for distributing search queries a
 
 ---
 
-For production deployment assistance, contact: your.email@example.com
+For production deployment assistance, contact: edgar@mcochieng.com
