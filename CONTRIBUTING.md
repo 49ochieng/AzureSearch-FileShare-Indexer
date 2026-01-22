@@ -72,7 +72,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 ## Development Setup
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer.git
+git clone https://github.com/49ochieng/AzureSearch-FileShare-Indexer.git
 cd AzureSearch-FileShare-Indexer
 
 # Create virtual environment
