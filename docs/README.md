@@ -218,10 +218,10 @@ Found an issue or want to improve the documentation?
 - [OpenAI Python Client](https://github.com/openai/openai-python)
 
 ### Community
-- [GitHub Discussions](https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/discussions)
+- [GitHub Discussions](https://github.com/49ochieng/AzureSearch-FileShare-Indexer/discussions)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-search)
 
 ---
 
-**Questions not answered here?** Check [Troubleshooting](TROUBLESHOOTING.md) or open an [issue](https://github.com/YOUR_USERNAME/AzureSearch-FileShare-Indexer/issues).
+**Questions not answered here?** Check [Troubleshooting](TROUBLESHOOTING.md) or open an [issue](https://github.com/49ochieng/AzureSearch-FileShare-Indexer/issues).
 ```
