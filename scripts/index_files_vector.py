@@ -8,48 +8,50 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import argparse
-from config import Config
 from src.vector_indexer import VectorIndexer
-import logging
-
-logging.basicConfig(
-    level=getattr(logging, Config.LOG_LEVEL),
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(Config.LOG_FILE),
-        logging.StreamHandler()
-    ]
-)
-
-logger = logging.getLogger(__name__)
+from config import Config
+import argparse
 
 
 def main():
+    """Run file indexing with vector embeddings"""
     parser = argparse.ArgumentParser(description="Index files with vectors into Azure AI Search")
-    parser.add_argument("--path", default=Config.FILE_SHARE_PATH, help="Path to file share or directory")
-    parser.add_argument("--batch-size", type=int, default=Config.BATCH_SIZE, help="Batch size for indexing")
+    parser.add_argument("--path", type=str, help="Path to file share (overrides config)")
+    parser.add_argument("--recursive", action="store_true", default=True, help="Index subdirectories")
+    parser.add_argument("--no-progress", action="store_true", help="Disable progress bar")
+    
     args = parser.parse_args()
     
-    if not args.path:
-        logger.error("FILE_SHARE_PATH not configured. Set it in .env file.")
-        sys.exit(1)
+    print("=" * 80)
+    print("FILE SHARE INDEXER - VECTOR EMBEDDINGS")
+    print("=" * 80)
+    print()
     
+    # Validate configuration
     try:
-        indexer = VectorIndexer()
-        success = indexer.index_directory_with_vectors(args.path)
-        
-        if success:
-            logger.info("Vector indexing completed successfully")
-            sys.exit(0)
-        else:
-            logger.error("Vector indexing failed")
-            sys.exit(1)
-    
+        Config.validate(require_openai=True)
     except Exception as e:
-        logger.error(f"Error: {e}")
-        sys.exit(1)
+        print(f"❌ Configuration error: {e}")
+        return 1
+    
+    # Print configuration
+    Config.print_config()
+    print()
+    
+    # Create indexer
+    indexer = VectorIndexer()
+    
+    # Run indexing
+    path = args.path or Config.FILE_SHARE_PATH
+    stats = indexer.index_directory(
+        directory_path=path,
+        recursive=args.recursive,
+        show_progress=not args.no_progress
+    )
+    
+    print("\n✨ Vector indexing complete!")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
