@@ -7,7 +7,6 @@ import sys
 import os
 from pathlib import Path
 from loguru import logger
-from config.settings import Config
 
 
 def setup_logger():
@@ -19,6 +18,9 @@ def setup_logger():
     - detailed: Includes timestamp, level, module
     - json: Structured JSON logs for monitoring systems
     """
+    # Import Config here to avoid circular import
+    from config.settings import Config
+    
     # Remove default logger
     logger.remove()
     
