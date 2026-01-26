@@ -140,7 +140,11 @@ class ContentExtractor:
             owner_sid = sd.GetSecurityDescriptorOwner()
             name, domain, type = win32security.LookupAccountSid(None, owner_sid)
             metadata["owner"] = f"{domain}\\{name}"
-        except:
+        except ImportError:
+            logger.debug("win32security not available, skipping owner lookup")
+            metadata["owner"] = "Unknown"
+        except Exception as e:
+            logger.debug(f"Could not get file owner: {e}")
             metadata["owner"] = "Unknown"
         
         return metadata
