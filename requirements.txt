@@ -10,7 +10,7 @@ openai==1.54.0
 python-docx==1.2.0
 PyPDF2==3.0.1
 openpyxl==3.1.5
-python-magic-bin==0.4.14
+python-magic-bin==0.4.14; sys_platform == 'win32'
 
 # Text Processing & Embeddings
 tiktoken==0.7.0
@@ -29,15 +29,15 @@ python-dateutil==2.9.0
 # Logging & Monitoring
 loguru==0.7.2
 
+# Windows-specific (Optional)
+# pywin32==306  # Uncomment for Windows file ownership detection
+
+# Development & Testing
+pytest==7.4.0
+pytest-cov==4.1.0
+
 # Optional: Enhanced Features
 # pdfplumber==0.10.0  # Better PDF extraction
 # Pillow==10.0.0      # Image processing
 # markdown==3.5.1     # Markdown support
 # pytesseract==0.3.10 # OCR for scanned documents
-
-# Development & Testing (optional)
-# pytest==7.4.0
-# pytest-cov==4.1.0
-# black==23.7.0
-# flake8==6.1.0
-# mypy==1.5.0

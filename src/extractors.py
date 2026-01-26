@@ -133,14 +133,16 @@ class ContentExtractor:
             "accessed_time": datetime.fromtimestamp(stat.st_atime).isoformat(),
         }
         
-        # Try to get Windows file owner
+        # Try to get Windows file owner (Windows only)
         try:
             import win32security
             sd = win32security.GetFileSecurity(file_path, win32security.OWNER_SECURITY_INFORMATION)
             owner_sid = sd.GetSecurityDescriptorOwner()
             name, domain, type = win32security.LookupAccountSid(None, owner_sid)
             metadata["owner"] = f"{domain}\\{name}"
-        except:
+        except (ImportError, Exception) as e:
+            # win32security not available or other error (e.g., on non-Windows systems)
+            logger.debug(f"Could not get file owner: {e}")
             metadata["owner"] = "Unknown"
         
         return metadata
