@@ -1,0 +1,61 @@
+version: 2
+updates:
+  # Enable version updates for Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "your-username"
+    assignees:
+      - "your-username"
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    
+    # Grouping strategy
+    groups:
+      azure-packages:
+        patterns:
+          - "azure-*"
+      development-dependencies:
+        patterns:
+          - "pytest*"
+          - "black"
+          - "isort"
+          - "flake8"
+          - "mypy"
+          - "pylint"
+        update-types:
+          - "minor"
+          - "patch"
+    
+    # Auto-merge settings for patch and minor updates
+    allow:
+      - dependency-type: "all"
+    
+    # Ignore specific dependencies
+    ignore:
+      # Add any packages you want to ignore
+      # - dependency-name: "package-name"
+      #   versions: ["1.x"]
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
