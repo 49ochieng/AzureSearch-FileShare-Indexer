@@ -40,6 +40,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Docker support with Dockerfile and docker-compose.yml for containerized deployment
+- Comprehensive Docker deployment guide (docs/DOCKER.md)
+- Performance optimization guide (docs/PERFORMANCE.md) with benchmarks and tuning strategies
+- Security best practices documentation (docs/SECURITY.md)
+- Additional badges in README for improved project visibility
+
+### Documentation
+- Detailed Docker deployment instructions for production environments
+- Kubernetes deployment examples and CronJob configurations
+- Performance tuning guidelines for different Azure tiers
+- Security hardening recommendations and compliance checklists
+- Benchmarking methodologies and expected performance metrics
+
 ### Planned
 - Support for additional file formats (MSG, EML, HTML)
 - Real-time indexing with file system watchers
