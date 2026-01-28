@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  indexer:
+    build: .
+    container_name: azure-search-indexer
+    environment:
+      # Azure Search Configuration
+      - AZURE_SEARCH_ENDPOINT=${AZURE_SEARCH_ENDPOINT}
+      - AZURE_SEARCH_ADMIN_KEY=${AZURE_SEARCH_ADMIN_KEY}
+      
+      # Azure OpenAI Configuration
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+      - AZURE_OPENAI_KEY=${AZURE_OPENAI_KEY}
+      - AZURE_OPENAI_EMBEDDING_DEPLOYMENT=${AZURE_OPENAI_EMBEDDING_DEPLOYMENT:-text-embedding-ada-002}
+      - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION:-2024-02-15-preview}
+      
+      # Index Configuration
+      - INDEX_NAME=${INDEX_NAME:-documents-index}
+      - VECTOR_INDEX_NAME=${VECTOR_INDEX_NAME:-documents-vector-index}
+      
+      # File Share Configuration
+      - FILE_SHARE_PATH=${FILE_SHARE_PATH}
+      - SUPPORTED_EXTENSIONS=${SUPPORTED_EXTENSIONS:-.docx,.pdf,.xlsx,.txt,.pptx}
+      
+      # Processing Configuration
+      - BATCH_SIZE=${BATCH_SIZE:-10}
+      - MAX_CHUNK_SIZE=${MAX_CHUNK_SIZE:-1000}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-200}
+      - ENABLE_INCREMENTAL_INDEXING=${ENABLE_INCREMENTAL_INDEXING:-true}
+      - ENABLE_EMBEDDING_CACHE=${ENABLE_EMBEDDING_CACHE:-true}
+      
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_TO_FILE=${LOG_TO_FILE:-true}
+    
+    volumes:
+      # Mount file share to index
+      - ${FILE_SHARE_PATH}:/data:ro
+      # Mount logs directory
+      - ./logs:/app/logs
+      # Mount cache directory (for embeddings)
+      - ./cache:/app/cache
+    
+    networks:
+      - indexer-network
+    
+    restart: unless-stopped
+    
+    # Optional: Run as scheduled job instead of continuous service
+    # command: python scripts/index_files_vector.py /data
+
+  # Optional: Add a simple monitoring service
+  # monitoring:
+  #   image: prom/prometheus:latest
+  #   container_name: indexer-monitoring
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - "9090:9090"
+  #   networks:
+  #     - indexer-network
+
+networks:
+  indexer-network:
+    driver: bridge
+
+volumes:
+  cache:
+    driver: local
