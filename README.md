@@ -7,6 +7,10 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Azure](https://img.shields.io/badge/Azure-AI%20Search-0078D4)
 ![OpenAI](https://img.shields.io/badge/Azure-OpenAI-412991)
+![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)
+![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC.svg)
+![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg)
+![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen.svg)
 
 **Enterprise-grade document indexing for Azure AI Search with vector embeddings and semantic search**
 
