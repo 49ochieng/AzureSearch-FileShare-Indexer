@@ -1,0 +1,143 @@
+name: Python CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Test Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov flake8 black mypy
+    
+    - name: Lint with flake8
+      run: |
+        # Stop build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+    
+    - name: Check code formatting with black
+      run: |
+        black --check --line-length 120 src/ config/ tests/
+    
+    - name: Type check with mypy
+      run: |
+        mypy src/ config/ --ignore-missing-imports || true
+    
+    - name: Run tests with pytest
+      run: |
+        pytest tests/ -v --cov=src --cov=config --cov-report=xml --cov-report=html
+      env:
+        AZURE_SEARCH_ENDPOINT: https://test.search.windows.net
+        AZURE_SEARCH_KEY: test-key
+        AZURE_SEARCH_INDEX_NAME: test-index
+        FILE_SHARE_PATH: ./tests
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  lint-docker:
+    name: Lint Dockerfile
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run hadolint
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: Dockerfile
+        ignore: DL3008,DL3013
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety
+    
+    - name: Run Bandit security scan
+      run: |
+        bandit -r src/ config/ -f json -o bandit-report.json || true
+        bandit -r src/ config/ -ll
+    
+    - name: Check for known security vulnerabilities
+      run: |
+        safety check --json || true
+        safety check
+    
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-reports
+        path: bandit-report.json
+
+  build-package:
+    name: Build and verify package
+    runs-on: ubuntu-latest
+    needs: [test]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build package
+      run: python -m build
+    
+    - name: Check package
+      run: twine check dist/*
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-packages
+        path: dist/
