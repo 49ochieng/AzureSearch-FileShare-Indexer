@@ -24,12 +24,12 @@ with open('requirements.txt', 'r', encoding='utf-8') as f:
 setup(
     name="azuresearch-fileshare-indexer",
     version="1.0.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Edgar McOchieng",
+    author_email="edgar@example.com",
     description="Enterprise-grade document indexing for Azure AI Search with vector embeddings",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/AzureSearch-FileShare-Indexer",
+    url="https://github.com/edgarochieng/AzureSearch-FileShare-Indexer",
     packages=find_packages(include=['src', 'src.*', 'config', 'config.*']),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -77,8 +77,8 @@ setup(
     },
     keywords='azure search indexing vector-embeddings semantic-search openai documents',
     project_urls={
-        'Bug Reports': 'https://github.com/yourusername/AzureSearch-FileShare-Indexer/issues',
-        'Source': 'https://github.com/yourusername/AzureSearch-FileShare-Indexer',
-        'Documentation': 'https://github.com/yourusername/AzureSearch-FileShare-Indexer/tree/main/docs',
+        'Bug Reports': 'https://github.com/edgarochieng/AzureSearch-FileShare-Indexer/issues',
+        'Source': 'https://github.com/edgarochieng/AzureSearch-FileShare-Indexer',
+        'Documentation': 'https://github.com/edgarochieng/AzureSearch-FileShare-Indexer/tree/main/docs',
     },
 )
