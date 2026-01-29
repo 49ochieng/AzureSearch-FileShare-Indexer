@@ -64,6 +64,14 @@ class ContentExtractor:
         Raises:
             ExtractionError: If extraction fails
         """
+        # Validate file exists
+        if not os.path.exists(file_path):
+            raise ExtractionError(f"File not found: {file_path}")
+        
+        # Validate file is readable
+        if not os.path.isfile(file_path):
+            raise ExtractionError(f"Path is not a file: {file_path}")
+            
         ext = os.path.splitext(file_path)[1].lower()
         
         if ext not in self.EXTRACTORS:
@@ -230,8 +238,18 @@ class ContentExtractor:
             return '\n\n'.join(text_parts)
     
     def _extract_xlsx(self, file_path: str) -> str:
-        """Extract text from XLSX file"""
-        wb = openpyxl.load_workbook(file_path, data_only=True)
+        """Extract text from XLSX file with error handling
+        
+        Args:
+            file_path: Path to the XLSX file
+            
+        Returns:
+            Extracted text content from all sheets
+        """
+        try:
+            wb = openpyxl.load_workbook(file_path, data_only=True)
+        except Exception as e:
+            raise ExtractionError(f"Failed to load XLSX file: {e}")
         
         all_text = []
         for sheet in wb.worksheets:

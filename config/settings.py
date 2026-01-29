@@ -126,6 +126,8 @@ class Config:
             
         if not cls.FILE_SHARE_PATH:
             errors.append("FILE_SHARE_PATH is required")
+        elif cls.FILE_SHARE_PATH and not os.path.exists(cls.FILE_SHARE_PATH):
+            errors.append(f"FILE_SHARE_PATH does not exist: {cls.FILE_SHARE_PATH}")
             
         # OpenAI validation (if required)
         if require_openai:
@@ -143,6 +145,9 @@ class Config:
             
         if cls.BATCH_SIZE < 1 or cls.BATCH_SIZE > 1000:
             errors.append("BATCH_SIZE must be between 1 and 1000")
+            
+        if cls.MAX_WORKERS < 1 or cls.MAX_WORKERS > 32:
+            errors.append("MAX_WORKERS must be between 1 and 32")
             
         if cls.EMBEDDING_DIMENSIONS not in [1536, 3072]:
             errors.append("EMBEDDING_DIMENSIONS must be 1536 or 3072")
