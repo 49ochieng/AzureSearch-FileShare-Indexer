@@ -119,7 +119,14 @@ class ContentExtractor:
         return metadata
     
     def _get_filesystem_metadata(self, file_path: str) -> Dict[str, Any]:
-        """Extract file system metadata"""
+        """Extract file system metadata
+        
+        Args:
+            file_path: Path to the file
+            
+        Returns:
+            Dictionary containing file system metadata (name, size, dates, owner)
+        """
         stat = os.stat(file_path)
         
         metadata = {
@@ -152,7 +159,14 @@ class ContentExtractor:
     # =========================================================================
     
     def _extract_txt(self, file_path: str) -> str:
-        """Extract text from plain text file"""
+        """Extract text from plain text file with multiple encoding support
+        
+        Args:
+            file_path: Path to the text file
+            
+        Returns:
+            Extracted text content with fallback encoding handling
+        """
         encodings = ['utf-8', 'utf-16', 'latin-1', 'cp1252']
         
         for encoding in encodings:
@@ -167,7 +181,14 @@ class ContentExtractor:
             return f.read().decode('utf-8', errors='ignore')
     
     def _extract_docx(self, file_path: str) -> str:
-        """Extract text from DOCX file"""
+        """Extract text from DOCX file including paragraphs and tables
+        
+        Args:
+            file_path: Path to the DOCX file
+            
+        Returns:
+            Extracted text content from paragraphs and tables
+        """
         doc = docx.Document(file_path)
         
         # Extract paragraphs
@@ -185,7 +206,14 @@ class ContentExtractor:
         return '\n'.join(all_text)
     
     def _extract_pdf(self, file_path: str) -> str:
-        """Extract text from PDF file"""
+        """Extract text from PDF file with page-by-page processing
+        
+        Args:
+            file_path: Path to the PDF file
+            
+        Returns:
+            Extracted text content with page markers
+        """
         with open(file_path, 'rb') as f:
             pdf = PdfReader(f)
             

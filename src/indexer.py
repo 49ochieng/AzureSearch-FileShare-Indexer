@@ -99,7 +99,14 @@ class FileIndexer:
             logger.warning(f"Could not save cache: {e}")
     
     def _should_index_file(self, file_path: str) -> bool:
-        """Check if file should be indexed"""
+        """Check if file should be indexed based on size and incremental settings
+        
+        Args:
+            file_path: Path to the file to check
+            
+        Returns:
+            True if file should be indexed, False otherwise
+        """
         # Check file size
         file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
         if file_size_mb > Config.MAX_FILE_SIZE_MB:
@@ -119,7 +126,14 @@ class FileIndexer:
         return True
     
     def _generate_document_id(self, file_path: str) -> str:
-        """Generate unique document ID"""
+        """Generate unique document ID using MD5 hash of file path
+        
+        Args:
+            file_path: Path to the file
+            
+        Returns:
+            MD5 hash string as document identifier
+        """
         return hashlib.md5(file_path.encode()).hexdigest()
     
     def _prepare_document(self, file_path: str) -> Optional[Dict[str, Any]]:
