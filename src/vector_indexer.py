@@ -204,7 +204,7 @@ class VectorIndexer:
         logger.debug(f"Split text into {len(chunks)} chunks ({len(tokens)} tokens total)")
         return chunks
     
-    def generate_embedding(self, text: str, use_cache: bool = True) -> Optional[List[float]]:
+    def generate_embedding(self, text: str, use_cache: bool = True) -> Optional[list[float]]:
         """
         Generate embedding for text using Azure OpenAI
         
