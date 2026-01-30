@@ -1,4 +1,19 @@
+
 # AzureSearch FileShare Indexer
+
+**AzureSearch FileShare Indexer** is a robust, enterprise-grade solution for indexing and searching documents from file shares using Azure AI Search. Designed for scalability and flexibility, it supports both traditional and semantic search, making it ideal for organizations seeking advanced document discovery capabilities.
+
+## Why Use This Project?
+
+- Effortlessly index files from local or network file shares
+- Leverage both keyword and vector-based search for superior results
+- Modular, extensible architecture for custom extractors and pipelines
+- Easy deployment with Docker and environment-based configuration
+- Detailed logging and error handling for production readiness
+
+## 🚀 Usage
+
+To get started, see [docs/USAGE.md](docs/USAGE.md) for setup and usage instructions. Example scripts are available in the `scripts/` directory for common indexing and search tasks.
 
 <div align="center">
 
