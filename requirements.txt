@@ -32,9 +32,11 @@ loguru==0.7.2
 # Windows-specific (Optional)
 # pywin32==306  # Uncomment for Windows file ownership detection
 
+
 # Development & Testing
 pytest==7.4.0
 pytest-cov==4.1.0
+rich==13.7.0  # For beautiful CLI output and debugging
 
 # Optional: Enhanced Features
 # pdfplumber==0.10.0  # Better PDF extraction
