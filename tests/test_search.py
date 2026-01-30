@@ -10,6 +10,12 @@ from src.search import SearchClient
 
 
 class TestSearchClient(unittest.TestCase):
+
+        def test_format_results_empty(self):
+            """Test format_results returns 'No results found.' for empty input"""
+            search = SearchClient(use_vector_index=False)
+            result = search.format_results([])
+            self.assertEqual(result, "No results found.")
     """Test cases for SearchClient class"""
     
     @patch('src.search.AzureSearchClient')
