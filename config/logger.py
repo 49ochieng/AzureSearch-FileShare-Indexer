@@ -8,8 +8,18 @@ import os
 from pathlib import Path
 from loguru import logger
 
+
 # Flag to track if logger is initialized
 _logger_initialized = False
+
+def log_exception(exc: Exception, message: str = "Exception occurred"):
+    """
+    Log an exception with traceback using loguru.
+    Args:
+        exc: Exception instance
+        message: Custom message to log
+    """
+    logger.error(f"{message}: {exc}", exc_info=True)
 
 
 def setup_logger(log_level="INFO", log_file="logs/indexer.log", log_to_console=True, log_format="detailed"):
