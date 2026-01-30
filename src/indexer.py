@@ -1,6 +1,7 @@
 """
-Standard indexer for Azure AI Search (without vector embeddings)
-For high-performance text indexing with metadata
+Indexer module for AzureSearch FileShare Indexer
+
+This module implements the core logic for indexing files from file shares into Azure AI Search. It supports high-performance text indexing, metadata extraction, and batch uploads. Designed for extensibility and production use, it enables both standard and advanced search scenarios.
 
 Author: Edgar McOchieng
 """
