@@ -361,40 +361,31 @@ class SearchClient:
         if not results:
             return "No results found."
         
-        output = []
-        output.append(f"\nFound {len(results)} results:\n")
-        output.append("=" * 80)
-        
+        if not results:
+            return "No results found."
+
+        lines = [f"\nFound {len(results)} results:\n", "=" * 80]
+
         for i, result in enumerate(results, 1):
-            output.append(f"\n{i}. {result.get('name', 'Unknown')}")
-            
+            lines.append(f"\n{i}. {result.get('name', 'Unknown')}")
             if 'chunkNumber' in result:
-                output.append(f"   Chunk: {result['chunkNumber'] + 1}/{result.get('totalChunks', '?')}")
-            
-            output.append(f"   Path: {result.get('filePath', 'Unknown')}")
-            output.append(f"   Extension: {result.get('extension', 'Unknown')}")
-            
+                lines.append(f"   Chunk: {result['chunkNumber'] + 1}/{result.get('totalChunks', '?')}")
+            lines.append(f"   Path: {result.get('filePath', 'Unknown')}")
+            lines.append(f"   Extension: {result.get('extension', 'Unknown')}")
             if 'modifiedDateTime' in result:
-                output.append(f"   Modified: {result['modifiedDateTime']}")
-            
+                lines.append(f"   Modified: {result['modifiedDateTime']}")
             if show_scores and '@search.score' in result:
-                output.append(f"   Score: {result['@search.score']:.4f}")
-            
+                lines.append(f"   Score: {result['@search.score']:.4f}")
             if '@search.reranker_score' in result:
-                output.append(f"   Reranker Score: {result['@search.reranker_score']:.4f}")
-            
-            # Show captions if available
+                lines.append(f"   Reranker Score: {result['@search.reranker_score']:.4f}")
             if '@search.captions' in result:
                 for caption in result['@search.captions']:
-                    output.append(f"   Caption: {caption.text}")
-            
-            # Show content preview
+                    lines.append(f"   Caption: {caption.text}")
             content = result.get('chunk') or result.get('content', '')
             if content:
                 preview = content[:200].replace('\n', ' ')
-                output.append(f"   Preview: {preview}...")
-            
-            output.append("")
-        
-        output.append("=" * 80)
-        return '\n'.join(output)
+                lines.append(f"   Preview: {preview}...")
+            lines.append("")
+
+        lines.append("=" * 80)
+        return '\n'.join(lines)
