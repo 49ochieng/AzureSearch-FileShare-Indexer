@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2025-01-17
 
+## [1.0.1] - 2026-02-09
+
+### Changed
+- Improved documentation in README.md and USAGE.md
+- Added more usage tips and clarifications
+- Updated documentation to better guide new users
+
 ### Added
 - Initial release
 - Multi-format document indexing (DOCX, PDF, XLSX, TXT, PPTX)
