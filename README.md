@@ -11,6 +11,13 @@
 - Easy deployment with Docker and environment-based configuration
 - Detailed logging and error handling for production readiness
 
+## 📢 New in Documentation
+
+- Improved usage instructions and best practices
+- Expanded troubleshooting and deployment guides
+- More code examples in the [docs/USAGE.md](docs/USAGE.md)
+
+
 ## 🚀 Usage
 
 To get started, see [docs/USAGE.md](docs/USAGE.md) for setup and usage instructions. Example scripts are available in the `scripts/` directory for common indexing and search tasks.
@@ -36,6 +43,8 @@ To get started, see [docs/USAGE.md](docs/USAGE.md) for setup and usage instructi
 ---
 
 ## 🌟 Features
+
+> **Tip:** For a detailed explanation of each feature and how to use them, check the [USAGE guide](docs/USAGE.md) and [API reference](docs/API.md).
 
 ### Core Capabilities
 - ✅ **Multi-Format Support**: Index DOCX, PDF, XLSX, TXT, PPTX files
