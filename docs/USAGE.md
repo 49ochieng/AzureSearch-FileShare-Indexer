@@ -2,6 +2,8 @@
 
 Comprehensive guide for using AzureSearch FileShare Indexer.
 
+> **Note:** This guide is regularly updated. For the latest tips and troubleshooting, always check the [TROUBLESHOOTING.md](TROUBLESHOOTING.md) and [DEPLOYMENT.md](DEPLOYMENT.md) files.
+
 ---
 
 ## Table of Contents
@@ -20,6 +22,7 @@ Comprehensive guide for using AzureSearch FileShare Indexer.
 ## Quick Start
 
 ### 30-Second Start
+> **Quick Tip:** Make sure your environment variables are set before running the scripts. See [docs/SETUP.md](SETUP.md) for details.
 ```bash
 # 1. Create index
 python scripts/create_vector_index.py
@@ -38,6 +41,7 @@ from src import VectorIndexer, SearchClient
 # Index documents
 indexer = VectorIndexer()
 indexer.index_directory("/path/to/documents")
+print("Indexing complete!")
 
 # Search
 search = SearchClient()
